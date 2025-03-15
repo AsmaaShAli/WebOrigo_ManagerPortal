@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\DeviceController;
+use App\Http\Middleware\ApiKeyMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/device/register', [DeviceController::class, 'register']);
+
+Route::middleware(ApiKeyMiddleware::class)->group(function () {
+    Route::post('/device/info', [DeviceController::class, 'info']);
+    Route::post('/leasing/update', [DeviceController::class, 'update']);
 });
