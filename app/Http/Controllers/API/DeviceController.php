@@ -17,7 +17,7 @@ class DeviceController extends Controller
     public function register(Request $request)
     {
         $device = Device::where('device_id',$request->deviceId)->firstOrFail();
-        $remember_token = Str::random(20);
+        $remember_token = Str::random(30);
 
         $device->update([
             'remember_token'  => $remember_token,
@@ -31,7 +31,7 @@ class DeviceController extends Controller
             }
 
             return responder()->success([
-                'deviceId'      => $device->id,
+                'deviceId'      => $device->device_id,
                 'deviceAPIKey'  => $device->remember_token,
                 'deviceType'    => $device->type,
                 'timestamp'     => date('Y-m-d H:i:s'),
@@ -44,7 +44,7 @@ class DeviceController extends Controller
             return responder()->error(422, 'Invalid activation code.');
         }
 
-        $leasing_plan_id = ActivationCode::where('id',$request->activationCode)->first()->leasing_plan_id;
+        $leasing_plan_id = ActivationCode::where('code',$request->activationCode)->first()->leasing_plan_id;
 
         $device->update([
             'type'              => 'leasing',
@@ -54,7 +54,7 @@ class DeviceController extends Controller
         ]);
 
         return responder()->success([
-            'deviceId'      => $device->id,
+            'deviceId'      => $device->device_id,
             'deviceAPIKey'  => $device->remember_token,
             'deviceType'    => $device->type,
             'timestamp'     => date('Y-m-d'),

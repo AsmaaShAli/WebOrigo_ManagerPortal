@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Device extends Model
 {
     protected $table = 'devices';
-
+    protected $guarded = ['device_id'];
     public function leasingPlan()
     {
         return $this->hasOne(\App\Models\LeasingPlan::class, 'leasing_plan_id', 'id');

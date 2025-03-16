@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('device_id');
+            $table->string('device_id')->unique();
             $table->enum('type', ['free','leasing','unset','restricted'])->default('unset');
             $table->string('activation_code')->nullable();
             $table->integer('leasing_plan_id')->nullable(); //foreign key

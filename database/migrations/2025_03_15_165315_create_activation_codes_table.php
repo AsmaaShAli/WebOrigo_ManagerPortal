@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('activation_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->integer('leasing_plan_id'); //foreign key
             $table->timestamps();
         });
