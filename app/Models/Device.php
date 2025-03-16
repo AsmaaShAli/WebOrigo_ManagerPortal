@@ -17,5 +17,12 @@ class Device extends Model
     {
         return $this->hasOne(\App\Models\Owner::class, 'owner_id', 'id');
     }
+    public function isActivationCodeTaken($activationCode)
+    {
+        return $this->where('id','<>',$this->id)
+            ->where('activation_code',$activationCode)
+            ->whereIn('type',['free','leasing'])
+            ->exists();
+    }
 
 }

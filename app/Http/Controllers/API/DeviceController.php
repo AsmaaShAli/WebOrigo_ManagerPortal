@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivationCode;
 use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,14 +16,19 @@ class DeviceController extends Controller
      */
     public function register(Request $request)
     {
-        $device = Device::findorFail($request->deviceId);
+        $device = Device::where('device_id',$request->deviceId)->firstOrFail();
+        $remember_token = Str::random(20);
+
+        $device->update([
+            'remember_token'  => $remember_token,
+        ]);
 
         if(! $request->activationCode) {
-            if (!$device->activation_code && $device->type == 'unset'){
-                $device->type = 'free';
+            if (!$device->activation_code && $device->type == 'unset') {
+                $device->update([
+                    'type' => 'free',
+                ]);
             }
-
-            $device->remember_token = Str::random(20);
 
             return responder()->success([
                 'deviceId'      => $device->id,
@@ -32,26 +38,26 @@ class DeviceController extends Controller
             ])->respond(Response::HTTP_OK);
         }
 
-        $activation_code_taken = Device::where('id','<>',$device->id)
-                                ->where('activation_code',$request->activationCode)
-                                ->whereIn('type',['free','leasing'])
-                                ->exists();
+        $activation_code_taken = $device->isActivationCodeTaken($request->activationCode);
 
         if ($activation_code_taken) {
             return responder()->error(422, 'Invalid activation code.');
         }
 
+        $leasing_plan_id = ActivationCode::where('id',$request->activationCode)->first()->leasing_plan_id;
+
         $device->update([
             'type'              => 'leasing',
             'activation_code'   => $request->activationCode,
-            'remember_token'    => Str::random(20),
+            'leasing_plan_id'   => $leasing_plan_id,
+            'registered_at'     => date('Y-m-d H:i:s'),
         ]);
 
         return responder()->success([
             'deviceId'      => $device->id,
             'deviceAPIKey'  => $device->remember_token,
             'deviceType'    => $device->type,
-            'timestamp'     => date('Y-m-d H:i:s'),
+            'timestamp'     => date('Y-m-d'),
         ])->respond(Response::HTTP_OK);
     }
 

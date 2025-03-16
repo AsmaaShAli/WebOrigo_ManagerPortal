@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('device_id');
             $table->enum('type', ['free','leasing','unset','restricted'])->default('unset');
             $table->string('activation_code')->nullable();
             $table->integer('leasing_plan_id')->nullable(); //foreign key
             $table->integer('owner_id')->nullable(); //foreign key
-            $table->date('registration_date')->nullable();
+            $table->date('registered_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
