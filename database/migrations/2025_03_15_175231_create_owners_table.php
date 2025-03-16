@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->string('billing_name');
             $table->string('address_country');
             $table->string('address_zip');

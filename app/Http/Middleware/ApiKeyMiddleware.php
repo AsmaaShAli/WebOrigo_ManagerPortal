@@ -15,7 +15,8 @@ class ApiKeyMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle($request, Closure $next) {
-        $device = Device::where('id',$request->deviceId)->first();
+        $deviceId = $request->route()->parameter('deviceId');
+        $device = Device::where('device_id',$deviceId)->first();
         if ($request->header('X-API-KEY') !== ($device->remember_token ?? null )) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }

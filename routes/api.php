@@ -19,6 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/device/register', [DeviceController::class, 'register']);
 
 Route::middleware(ApiKeyMiddleware::class)->group(function () {
-    Route::post('/device/info', [DeviceController::class, 'info']);
-    Route::post('/leasing/update', [DeviceController::class, 'update']);
+    Route::get('/device/info/{deviceId}', [DeviceController::class, 'info']);
+    Route::post('/leasing/update/{deviceId}', [DeviceController::class, 'update']);
 });
