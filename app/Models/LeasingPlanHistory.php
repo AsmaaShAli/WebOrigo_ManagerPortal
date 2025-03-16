@@ -10,6 +10,6 @@ class LeasingPlanHistory extends Model
 
     public function leasingPlan()
     {
-        return $this->belongsTo(LeasingPlan::class,'id','leasing_plan_id');
+        return $this->belongsTo(LeasingPlan::class,'leasing_plan_id','id');
     }
 }

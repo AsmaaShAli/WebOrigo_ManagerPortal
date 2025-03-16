@@ -11,12 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leasing_plan_history', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('leasing_plan_id'); //foreign key
-            $table->string('device_id'); //foreign key
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -24,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('leasing_plan_history');
+        //
     }
 };

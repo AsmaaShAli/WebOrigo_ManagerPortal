@@ -10,6 +10,6 @@ class ActivationCode extends Model
 
     public function LeasingPlan()
     {
-        return $this->belongsTo(\App\Models\LeasingPlan::class, 'id', 'leasing_plan_id');
+        return $this->belongsTo(\App\Models\LeasingPlan::class, 'leasing_plan_id', 'id');
     }
 }

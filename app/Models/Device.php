@@ -15,7 +15,7 @@ class Device extends Model
 
     public function leasingPlanHistory()
     {
-        return $this->hasMany(\App\Models\LeasingPlanHistory::class, 'id', 'device_id');
+        return $this->hasMany(\App\Models\LeasingPlanHistory::class, 'device_id', 'device_id');
     }
 
     public function Owner()
